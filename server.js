@@ -26,13 +26,13 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-app.get('/', (req, res) => res.json(database.users));
+app.get('/', (req, res) => res.json('It is working!'));
 app.post('/signin', (req, res) => signin.handleSignin(req, res, db, bcrypt));
 app.post('/register', (req, res) => register.handleRegister(req, res, db, bcrypt));
 app.get('/profile/:id', (req, res) => profile.handleProfile(req, res, db));
 app.put('/image', (req, res) => image.handleImage(req, res, db));
 app.post('/imageUrl', (req, res) => image.handleApiCall(req, res));
 
-app.listen(4000, () => {
-    console.log('App is running on port 4000');
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`App is running on port ${process.env.PORT}`);
 });
