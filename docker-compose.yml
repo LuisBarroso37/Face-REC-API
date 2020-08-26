@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+    # Postgres
+    postgres:
+        container_name: postgres
+        build: ./postgres
+        environment:
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: password
+            POSTGRES_URL: postgres://user:password@localhost:5432/db
+            POSTGRES_DB: db
+            POSTGRES_HOST: postgres
+        ports:
+            - "5432:5432"
+    
+    # Redis
+    redis:
+        container_name: redis
+        image: redis
+        ports:
+            - "6379:6379"
+
+    # Backend API
+    face-rec-api:
+        container_name: backend
+        build: ./
+        command: npm start
+        working_dir: /usr/src/face-rec-api
+        environment:
+            POSTGRES_URI: postgres://user:password@postgres:5432/db
+            JWT_SECRET_KEY: 'JWT_SECRET_KEY'
+            CLARIFAI_API_KEY: 'API_KEY'
+            REDIS_URI: redis://redis:6379
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./:/usr/src/face-rec-api
